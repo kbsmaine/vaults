@@ -3,7 +3,7 @@
 ## Passed locally
 
 - **83 PostgreSQL security/workflow assertions** against the complete setup script in PGlite (PostgreSQL in WebAssembly). Auth and Storage platform schemas are represented by disposable fixtures. Tests cover all eight RLS tables, anonymous denial, customer-to-customer isolation, metadata escalation attempts, protected owner membership, restricted writes, immutable identity, message attribution, checklist RPC scoping, and private Storage SQL policies. Deliberately broad existing Storage policies do not defeat the portal guards.
-- **31 Node test cases**: 29 authentication/API cases plus customer and owner interaction suites. The interaction suites include multiple workflow assertions. Tests use controlled API responses and a DOM model, not a real browser or live Supabase service.
+- **37 Node test cases**: 29 authentication/API cases plus customer and owner interaction suites and project-selector regressions. The interaction suites include multiple workflow assertions. Tests use controlled API responses and a DOM model, not a real browser or live Supabase service.
 - **13 HTML pages and 8 application JavaScript files** pass source checks: landmarks, unique IDs, explicit labels, dependency loading order, local links/anchors, image alternatives, SVG parsing, CSS asset references, and JavaScript syntax.
 - **Static build passed** using `node build.cjs`. Website pages, assets, public configuration, and `_headers` are copied to `dist`; database setup scripts, tests, and instructions are excluded.
 
@@ -32,3 +32,9 @@ npm test --prefix backend/tests
 ```
 
 Only tests need npm dependencies. The website ships its pinned browser SDK and requires no npm installation. Never run `backend/tests/stubs.sql` or `backend/tests/security.sql` against your live Supabase database.
+
+## Customer project selector correction
+
+Fixed the disabled project dropdown showing a waiting cursor on new accounts. The project bar is hidden when no projects exist, leaving the first-project form accessible. The selector remains enabled with a single existing project. Waiting cursors apply only to controls marked busy by an active operation. Tests cover empty/one/multiple projects, pending writes, and first-project creation restoring selection.
+
+To apply this UI correction to the existing website, replace `portal.html`, `portal.js`, and `portal.css` from this package. No database changes are required.

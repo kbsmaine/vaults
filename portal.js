@@ -50,7 +50,9 @@
   function navigationBusy(busy) {
     busyCount += busy ? 1 : -1;
     busyCount = Math.max(0, busyCount);
-    $('projectSelect').disabled = busyCount > 0 || projects.length < 2;
+    $('projectSelect').disabled = busyCount > 0 || projects.length === 0;
+    $('projectSelect').setAttribute('aria-busy', String(busyCount > 0));
+    $('refreshProject').setAttribute('aria-busy', String(busyCount > 0));
     $('refreshProject').disabled = busyCount > 0 || !activeId;
   }
   function clearProjectStatuses() {
@@ -75,7 +77,9 @@
       select.append(option);
     });
     select.value = selectedId || (projects[0] && projects[0].id) || '';
-    select.disabled = busyCount > 0 || projects.length < 2;
+    select.disabled = busyCount > 0 || projects.length === 0;
+    select.setAttribute('aria-busy', String(busyCount > 0));
+    $('projectBar').hidden = projects.length === 0;
     $('emptyAccount').hidden = projects.length > 0;
     $('cancelProjectButton').hidden = !projects.length;
     $('newProjectButton').hidden = !projects.length;

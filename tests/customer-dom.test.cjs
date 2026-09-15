@@ -28,6 +28,72 @@ function setup(overrides={}){
 }
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
+test('customer project navigation hides only for an empty account', async t=>{
+ for(const count of [0,1,2]){
+  await t.test(`${count} customer projects`, async()=>{
+   const projects=Array.from({length:count},(_,i)=>project(`p${i+1}`));
+   const {ids}=setup({listProjects:async()=>projects});
+   await flush();
+   assert.equal(ids.projectBar.hidden,count===0);
+   assert.equal(ids.projectSelect.disabled,count===0);
+   if(count===0){
+    assert.equal(ids.newProjectPanel.hidden,false);
+    assert.equal(ids.newProjectForm.hidden,false);
+    assert.equal(ids.newTitle.disabled,false);
+    assert.equal(ids.emptyAccount.hidden,false);
+   }else{
+    assert.equal(ids.projectSelect.children.length,count);
+    assert.equal(ids.projectSelect.value,'p1');
+   }
+  });
+ }
+});
+test('customer project navigation is busy only while a write is pending', async()=>{
+ const sending=deferred();
+ const {ids}=setup({sendMessage:()=>sending.promise});
+ await flush();
+ assert.equal(ids.projectSelect.disabled,false);
+ assert.equal(ids.refreshProject.disabled,false);
+ ids.messageBody.value='A question about my project';
+ const submission=ids.messageForm.fire('submit');
+ for(const control of [ids.projectSelect,ids.refreshProject]){
+  assert.equal(control.disabled,true);
+  assert.equal(control.getAttribute('aria-busy'),'true');
+ }
+ assert.equal(ids.projectBar.hidden,false);
+ sending.resolve();
+ await submission;
+ for(const control of [ids.projectSelect,ids.refreshProject]){
+  assert.equal(control.disabled,false);
+  assert.equal(control.getAttribute('aria-busy'),'false');
+ }
+});
+test('creating the first customer project reveals an enabled project selector', async()=>{
+ const creation=deferred();
+ let createdPayload;
+ const {ids}=setup({listProjects:async()=>[],createProject:payload=>{createdPayload=payload;return creation.promise;}});
+ await flush();
+ assert.equal(ids.projectBar.hidden,true);
+ assert.equal(ids.newProjectPanel.hidden,false);
+ ids.newTitle.value='My new project';
+ ids.newService.value='vault-room';
+ ids.newZip.value='04001';
+ ids.newDescription.value='Description';
+ const submission=ids.newProjectForm.fire('submit');
+ assert.equal(createdPayload.title,'My new project');
+ assert.equal(ids.projectBar.hidden,true);
+ assert.equal(ids.newProjectPanel.hidden,false);
+ creation.resolve(project('new'));
+ await submission;
+ assert.equal(ids.projectBar.hidden,false);
+ assert.equal(ids.newProjectPanel.hidden,true);
+ assert.equal(ids.projectSelect.children.length,1);
+ assert.equal(ids.projectSelect.value,'new');
+ assert.equal(ids.projectSelect.disabled,false);
+ assert.equal(ids.projectSelect.getAttribute('aria-busy'),'false');
+ assert.equal(ids.refreshProject.disabled,false);
+ assert.equal(ids.projectTitle.textContent,'Project new');
+});
 test('customer portal: authorization, async races, input safety, and write lifecycles', async()=>{
  let x=setup({configured:false,requireSession:async()=>{throw Error('Must not authenticate')}});await flush();assert.equal(x.ids.setupNotice.hidden,false);assert.equal(x.ids.portalApp.hidden,true);
  x=setup({requireSession:async()=>null});await flush();assert.equal(x.ids.portalApp.hidden,true);
