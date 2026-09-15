@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Plan an indoor vault room, gun safe, or vault door project with Northwoods Vault & Safe. Serving all of Maine and New Hampshire.">
+  <meta name="theme-color" content="#173c32">
+  <title>Plan your project | Northwoods Vault & Safe</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="contact" id="top">
+  <div id="sharedHeader"></div>
+  <main id="main-content">
+    <section class="page-hero contact-hero">
+      <div class="page-hero-copy">
+        <div class="breadcrumbs"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Plan your project</span></div>
+        <p class="eyebrow">LET'S MAKE A PLAN</p>
+        <h1>Your space.<br><em>Your next step.</em></h1>
+        <p>Considering a vault room, a gun safe, or a vault door? Start with the basics. A good plan begins with your space and what you need from it.</p>
+      </div>
+      <div class="page-hero-art contact-hero-note">
+        <p class="eyebrow">A PROJECT BEGINS WITH A CONVERSATION</p>
+        <h2>Built around<br>your home.</h2>
+        <p>New construction or an existing space. Equipment selected or still exploring. We can start from where you are.</p>
+        <span class="region-label">MAINE &amp; NEW HAMPSHIRE · STATEWIDE</span>
+      </div>
+    </section>
+    <section class="content-section contact-section">
+      <div class="contact-layout">
+        <div class="contact-intro">
+          <p class="eyebrow">A FEW USEFUL DETAILS</p>
+          <h2>Tell us what<br>you have in mind.</h2>
+          <p>Use the planner to prepare a short project inquiry. You can review it, edit it, and copy it to share when you're ready.</p>
+          <div id="businessContact" hidden></div>
+          <div class="contact-card"><small>Service area</small><strong>All of Maine.<br>All of New Hampshire.</strong><p>Site access and project scope guide the plan for each location.</p></div>
+          <div class="privacy-note" id="inquiry-privacy"><strong>Start with the essentials.</strong><p>A ZIP code and a general description are enough. Keep combinations, access codes, detailed inventories, and your street address out of this inquiry.</p><p>This page does not send your details or save them in a website account. Copy your summary before leaving if you want to keep it.</p></div>
+        </div>
+        <div>
+          <form class="contact-form" id="contactForm" novalidate>
+            <fieldset id="inquiryFields" disabled>
+              <legend>Project inquiry</legend>
+              <p class="field-note">Fields marked * are required.</p>
+              <div class="field-row">
+                <div class="field"><label for="inquiryName">Your name *</label><input id="inquiryName" name="name" autocomplete="name" maxlength="100" required></div>
+                <div class="field"><label for="inquiryEmail">Email address *</label><input id="inquiryEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+              </div>
+              <div class="field-row">
+                <div class="field"><label for="inquiryPhone">Phone <span class="optional">(optional)</span></label><input id="inquiryPhone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
+                <div class="field"><label for="inquiryZip">Project ZIP code *</label><input id="inquiryZip" name="zip" autocomplete="postal-code" inputmode="numeric" pattern="0[34][0-9]{3}" minlength="5" maxlength="5" aria-describedby="zipHint" required><small class="field-note" id="zipHint">For a project in Maine or New Hampshire.</small></div>
+              </div>
+              <div class="field-row">
+                <div class="field"><label for="inquiryType">Project type *</label><select id="inquiryType" name="projectType" required><option value="">Choose a service</option><option value="vault-room">Indoor vault room</option><option value="vault-door">Vault door</option><option value="gun-safe">Gun safe</option></select></div>
+                <div class="field"><label for="inquiryFloor">Intended floor <span class="optional">(optional)</span></label><select id="inquiryFloor" name="floor"><option value="">Select if known</option><option>Basement</option><option>Ground floor</option><option>Upper floor</option><option>Garage / slab</option><option>Still deciding</option></select></div>
+              </div>
+              <div class="field"><label for="inquiryDetails">What are you considering? *</label><textarea id="inquiryDetails" name="details" rows="5" maxlength="2500" placeholder="Your space, approximate timing, equipment you're considering, or general access questions…" aria-describedby="detailsHint" required></textarea><small class="field-note" id="detailsHint">A short description is plenty. No street address or sensitive details.</small></div>
+              <p class="form-status" id="formStatus" role="alert"></p>
+              <button class="button" type="submit">Prepare inquiry <span aria-hidden="true">↗</span></button>
+              <p class="field-note">You'll review a summary next. This button does not send a message.</p>
+            </fieldset>
+            <noscript><p>Enable JavaScript to prepare an editable inquiry summary. You can also make a note of your project type, ZIP code, timing, and general questions to share directly.</p></noscript>
+          </form>
+          <section class="inquiry-preview" id="inquiryPreview" aria-labelledby="previewHeading" hidden>
+            <p class="eyebrow">READY FOR YOUR REVIEW</p>
+            <h2 id="previewHeading" tabindex="-1">Your project inquiry.</h2>
+            <label for="inquirySummary">Review or edit your summary</label>
+            <textarea id="inquirySummary" rows="13" spellcheck="true"></textarea>
+            <div class="inquiry-actions"><button class="button" id="copyRequest" type="button">Copy request <span aria-hidden="true">↗</span></button><a class="button button-light" id="emailDraft" hidden>Open email draft <span aria-hidden="true">↗</span></a></div>
+            <p class="field-note" id="emailDraftNote" hidden>An email draft is sent only when you send it from your email app.</p>
+            <p class="form-status" id="draftStatus" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+      </div>
+    </section>
+    <section class="quote-band"><div><p class="eyebrow">STILL EXPLORING?</p><h2>Know what happens next.</h2><p>See how planning, product selection, and installation fit together.</p></div><a class="button" href="process.html">Explore our process <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <div id="sharedFooter"></div>
+  <script src="site-config.js"></script>
+  <script src="components.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
