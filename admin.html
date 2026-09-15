@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Northwoods Vault & Safe owner workspace for customer projects.">
+<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#183d2d">
+<title>Owner workspace | Northwoods Vault & Safe</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="portal.css">
+</head>
+<body data-page="admin" id="top">
+<div id="sharedHeader"></div>
+<main id="main" class="portal-shell">
+  <section id="adminGate" class="portal-card portal-heading" aria-labelledby="gateHeading">
+    <p class="eyebrow">Northwoods account</p><h1 id="gateHeading" class="portal-heading">Opening your workspace.</h1>
+    <p id="gateStatus" class="portal-status" role="status" aria-live="polite">Checking your access…</p>
+    <div class="portal-actions"><a class="text-link" href="index.html">Back to the website</a><a id="gateAccount" class="text-link" href="account.html" hidden>Go to your account</a></div>
+  </section>
+  <div id="adminWorkspace" hidden>
+    <header class="portal-topbar">
+      <div class="portal-heading"><p class="eyebrow">Owner workspace</p><h1>Every detail, in order.</h1><p id="ownerGreeting" class="portal-muted"></p></div>
+      <div class="portal-actions"><a class="button portal-button-secondary" href="portal.html">Customer view</a><button id="adminSignOut" class="button portal-button-secondary" type="button">Sign out</button></div>
+    </header>
+    <p id="adminStatus" class="portal-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <div class="portal-toolbar"><p id="adminCounts" class="portal-muted">Loading customers and projects…</p><button id="refreshProjects" class="button portal-button-secondary button-small" type="button">Refresh projects</button></div>
+    <div class="portal-layout">
+      <aside class="portal-sidebar portal-card" aria-labelledby="projectListHeading">
+        <h2 id="projectListHeading">Customer projects</h2>
+        <div class="portal-form">
+          <label class="portal-field" for="projectSearch">Search projects or customers<input id="projectSearch" type="search" placeholder="Name, email, title or ZIP" autocomplete="off"></label>
+          <label class="portal-field" for="customerFilter">Customer<select id="customerFilter"><option value="">All customers</option></select></label>
+          <label class="portal-field" for="stageFilter">Project stage<select id="stageFilter"><option value="">All stages</option></select></label>
+        </div>
+        <p id="projectCount" class="portal-muted" role="status" aria-live="polite"></p>
+        <div id="projectList" class="portal-project-list" aria-label="Projects"></div>
+      </aside>
+      <div class="portal-content portal-stack">
+        <section id="projectPlaceholder" class="portal-card"><h2>Your project workspace</h2><p id="placeholderText" class="portal-empty">Loading projects…</p></section>
+        <div id="adminDetail" class="portal-stack" hidden>
+          <section class="portal-card" aria-labelledby="selectedProjectTitle">
+            <div class="portal-toolbar"><div><p class="eyebrow">Selected project</p><h2 id="selectedProjectTitle" tabindex="-1"></h2></div><span id="selectedStage" class="portal-badge"></span></div>
+            <p id="selectedCustomer" class="portal-meta"></p><p id="selectedService" class="portal-meta"></p><p id="selectedDescription" class="portal-prewrap"></p>
+            <p id="detailStatus" class="portal-status" role="status" aria-live="polite" aria-atomic="true"></p>
+          </section>
+          <section class="portal-card" aria-labelledby="projectEditHeading">
+            <h2 id="projectEditHeading">Project plan</h2><p class="portal-muted">Updates to these details appear in the customer’s account.</p>
+            <form id="projectEditForm" class="portal-form">
+              <label class="portal-field" for="editTitle">Project title<input id="editTitle" name="title" maxlength="160" required></label>
+              <div class="portal-field-row">
+                <label class="portal-field" for="editStage">Stage<select id="editStage" name="stage" required></select></label>
+                <label class="portal-field" for="editDate">Installation date <span class="portal-muted">(optional)</span><input id="editDate" name="installation_date" type="date"></label>
+              </div>
+              <label class="portal-field" for="editDateNote">Scheduling note <span class="portal-muted">(optional)</span><textarea id="editDateNote" name="date_note" rows="3" maxlength="1000" placeholder="Timing, arrival window, or what needs to happen before scheduling."></textarea></label>
+              <div class="portal-actions"><button class="button" type="submit">Save project plan</button></div>
+              <p class="portal-status" data-form-status role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <div class="portal-grid">
+            <section class="portal-card" aria-labelledby="updatesHeading">
+              <h2 id="updatesHeading">Project updates</h2><p class="portal-muted">Keep the customer informed as the work progresses.</p>
+              <div id="updatesList" class="portal-list portal-update-list"></div>
+              <form id="updateForm" class="portal-form">
+                <label class="portal-field" for="updateBody">New update<textarea id="updateBody" rows="4" maxlength="5000" required></textarea></label>
+                <button class="button" type="submit">Post update</button><p class="portal-status" data-form-status role="status" aria-live="polite"></p>
+              </form>
+            </section>
+            <section class="portal-card" aria-labelledby="checklistHeading">
+              <h2 id="checklistHeading">Preparation checklist</h2><p class="portal-muted">Add the tasks the customer needs to complete.</p>
+              <div id="checklistList" class="portal-list portal-checklist"></div>
+              <form id="checklistForm" class="portal-form">
+                <label class="portal-field" for="checklistLabel">New preparation task<input id="checklistLabel" maxlength="300" required placeholder="For example, clear the installation route"></label>
+                <button class="button" type="submit">Add task</button><p class="portal-status" data-form-status role="status" aria-live="polite"></p>
+              </form>
+            </section>
+          </div>
+          <section class="portal-card" aria-labelledby="messagesHeading">
+            <h2 id="messagesHeading">Customer conversation</h2><p class="portal-muted">Messages stay with this project.</p>
+            <div id="messagesList" class="portal-list portal-message-list"></div>
+            <form id="messageForm" class="portal-form">
+              <label class="portal-field" for="messageBody">Message to customer<textarea id="messageBody" rows="4" maxlength="5000" required></textarea></label>
+              <button class="button" type="submit">Send message</button><p class="portal-status" data-form-status role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <section class="portal-card" aria-labelledby="changesHeading">
+            <h2 id="changesHeading">Change requests</h2><p class="portal-muted">Review the customer’s request and share a clear response.</p>
+            <div id="changesList" class="portal-list"></div>
+          </section>
+          <section class="portal-card" aria-labelledby="documentsHeading">
+            <h2 id="documentsHeading">Project documents</h2><p class="portal-muted">Share plans, estimates, photos, or other project documents. PDF, PNG, and JPG files up to 10 MB.</p>
+            <div id="documentsList" class="portal-list"></div>
+            <form id="documentForm" class="portal-form">
+              <label class="portal-field" for="documentLabel">Document title<input id="documentLabel" maxlength="160" required placeholder="For example, Installation plan"></label>
+              <label class="portal-field" for="documentFile">File<input id="documentFile" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" aria-describedby="fileHelp" required></label>
+              <p id="fileHelp" class="field-note">Documents are available only to the customer and authorized Northwoods staff.</p>
+              <button class="button" type="submit">Upload document</button><p class="portal-status" data-form-status role="status" aria-live="polite"></p>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+  <noscript><p class="portal-card">Please enable JavaScript to use your Northwoods account. <a class="text-link" href="index.html">Return to the website</a>.</p></noscript>
+</main>
+<div id="sharedFooter"></div>
+<script src="site-config.js"></script><script src="components.js"></script><script src="app.js"></script><script src="assets/vendor/supabase.js"></script><script src="portal-config.js"></script><script src="portal-api.js"></script><script src="admin.js"></script>
+</body>
+</html>

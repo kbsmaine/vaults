@@ -1,0 +1,15 @@
+{
+  "name": "northwoods-portal-dom-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DOM and API behavior checks for the Northwoods account and project portals.",
+  "scripts": {
+    "test": "node --test *.test.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

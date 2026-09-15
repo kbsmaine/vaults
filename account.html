@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Sign in to your Northwoods Vault & Safe customer account to follow your installation and keep in touch.">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Customer account | Northwoods Vault & Safe</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="account.css">
+</head>
+<body data-page="account" id="top">
+<div id="sharedHeader"></div>
+<main id="main-content" class="account-layout">
+<section class="account-intro">
+<p class="eyebrow light">YOUR NORTHWOODS PROJECT</p>
+<h1>A little clarity.<br><em>Every step of the way.</em></h1>
+<p>Your installation, conversations, and next steps—all together in your customer account.</p>
+<ul class="account-benefits"><li>Follow your installation’s progress</li><li>Ask questions and request changes</li><li>Find shared documents and preparation tasks</li></ul>
+<div class="account-region">NORTHWOODS VAULT &amp; SAFE<br><span>Serving Maine &amp; New Hampshire statewide</span></div>
+</section>
+<section class="account-panel" aria-labelledby="accountTitle">
+<p class="eyebrow">CUSTOMER PORTAL</p><h2 id="accountTitle">Welcome back.</h2>
+<p id="accountDescription" class="portal-muted">Sign in to pick up where your project left off.</p>
+<p id="accountStatus" class="portal-status" role="status" aria-live="polite"></p>
+<div id="unavailable" class="portal-empty" hidden><h3>Opening soon.</h3><p>We’re getting customer accounts ready. Please check back soon or use our project planner to prepare your inquiry.</p><a class="button" href="contact.html">Plan your project</a></div>
+<div id="signedIn" hidden><p id="signedInLabel"></p><div class="portal-actions"><a class="button" href="portal.html">Open my portal <span aria-hidden="true">↗</span></a><button class="button portal-button-secondary" id="accountSignOut" type="button">Sign out</button></div></div>
+<div id="authViews" hidden>
+<form id="signInForm" class="portal-form" data-auth-view="signin">
+<label for="loginEmail">Email address</label><input type="email" id="loginEmail" name="email" autocomplete="username" maxlength="254" required>
+<label for="loginPassword">Password</label><input type="password" id="loginPassword" name="password" autocomplete="current-password" required>
+<button class="button" type="submit">Sign in <span aria-hidden="true">↗</span></button>
+<div class="account-switch"><button type="button" data-mode="reset">Forgot your password?</button><button type="button" data-mode="signup">Create an account</button></div>
+<button type="button" class="account-text-button" data-mode="resend">Resend confirmation email</button>
+</form>
+<form id="signUpForm" class="portal-form" data-auth-view="signup" hidden>
+<label for="signupName">Your name</label><input id="signupName" name="full_name" autocomplete="name" maxlength="100" required>
+<label for="signupEmail">Email address</label><input type="email" id="signupEmail" name="email" autocomplete="username" maxlength="254" required>
+<label for="signupPassword">Create a password</label><input type="password" id="signupPassword" name="password" autocomplete="new-password" minlength="12" maxlength="128" aria-describedby="passwordHint" required>
+<small id="passwordHint" class="portal-muted">Use at least 12 characters. A long, unique passphrase works well.</small>
+<label for="signupConfirm">Confirm password</label><input type="password" id="signupConfirm" name="confirm" autocomplete="new-password" minlength="12" maxlength="128" required>
+<p class="account-privacy">Your account connects you with Northwoods for project planning and installation support. <a href="portal-privacy.html">How your portal information is used</a>.</p>
+<button class="button" type="submit">Create my account <span aria-hidden="true">↗</span></button>
+<div class="account-switch"><button type="button" data-mode="signin">Already have an account? Sign in</button></div>
+</form>
+<form id="resetForm" class="portal-form" data-auth-view="reset" hidden>
+<label for="resetEmail">Email address</label><input type="email" id="resetEmail" name="email" autocomplete="email" maxlength="254" required>
+<button class="button" type="submit">Send password reset link</button><div class="account-switch"><button type="button" data-mode="signin">Back to sign in</button></div>
+</form>
+<form id="resendForm" class="portal-form" data-auth-view="resend" hidden>
+<label for="resendEmail">Email address</label><input type="email" id="resendEmail" name="email" autocomplete="email" maxlength="254" required>
+<button class="button" type="submit">Resend confirmation</button><div class="account-switch"><button type="button" data-mode="signin">Back to sign in</button></div>
+</form>
+<form id="passwordForm" class="portal-form" data-auth-view="update-password" hidden>
+<label for="newPassword">New password</label><input type="password" id="newPassword" name="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+<label for="confirmNewPassword">Confirm new password</label><input type="password" id="confirmNewPassword" name="confirm" autocomplete="new-password" minlength="12" maxlength="128" required>
+<small class="portal-muted">Use at least 12 characters.</small><button class="button" type="submit">Save new password</button>
+</form>
+</div>
+<noscript><p>Please enable JavaScript to use customer accounts.</p></noscript>
+<p class="account-footnote">Have a new project in mind? You can create an account before your installation is scheduled.</p>
+</section>
+</main><div id="sharedFooter"></div>
+<script src="site-config.js"></script><script src="components.js"></script><script src="app.js"></script>
+<script src="assets/vendor/supabase.js"></script><script src="portal-config.js"></script><script src="portal-api.js"></script><script src="account.js"></script>
+</body></html>

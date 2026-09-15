@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="description" content="Your Northwoods project, from the first conversation to installation day.">
+<meta name="theme-color" content="#183d2d"><title>Your project | Northwoods Vault &amp; Safe</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="portal.css">
+</head>
+<body data-page="portal" id="top"><div id="sharedHeader"></div>
+<main id="main" class="portal-shell">
+  <div class="portal-toolbar">
+    <div class="portal-heading"><p class="eyebrow">Your Northwoods project</p><h1>A clear path<br>to <em>installation day.</em></h1><p class="portal-muted" id="welcomeText">Updates, conversations, and next steps. All in one place.</p></div>
+    <div class="portal-actions" id="accountActions" hidden><a class="text-link" id="ownerLink" href="admin.html" hidden>Owner dashboard <span aria-hidden="true">↗</span></a><button type="button" class="button portal-button-secondary button-small" id="signOutButton">Sign out</button></div>
+  </div>
+  <div class="portal-status" id="pageStatus" role="status" aria-live="polite">Loading your account…</div>
+  <section class="portal-card portal-setup" id="setupNotice" hidden aria-labelledby="setupTitle"><p class="eyebrow">We’re getting things ready</p><h2 id="setupTitle">Your project portal is coming together.</h2><p>Online accounts are not available just yet. You can still use our project planner to prepare the details of your inquiry.</p><a class="button" href="contact.html">Plan your project <span aria-hidden="true">↗</span></a><a class="text-link" href="index.html">Back to home</a></section>
+  <div id="portalApp" class="portal-stack" hidden>
+    <section class="portal-card portal-project-bar" aria-label="Project selection"><label class="portal-field" for="projectSelect">Your projects<select id="projectSelect"></select></label><div class="portal-actions"><button type="button" class="button portal-button-secondary button-small" id="refreshProject">Refresh project</button><button type="button" class="button button-small" id="newProjectButton" aria-controls="newProjectPanel" aria-expanded="false">Start another project <span aria-hidden="true">+</span></button></div></section>
+    <section class="portal-empty portal-welcome" id="emptyAccount" hidden><span class="portal-monogram" aria-hidden="true">N / W</span><div><h2>Every project starts<br>with a conversation.</h2><p>Tell us about your space below. Once your request is submitted, its progress and our conversations will live here.</p></div></section>
+    <section class="portal-card" id="newProjectPanel" aria-labelledby="newProjectTitle" hidden>
+      <div class="portal-section-heading"><div><p class="eyebrow">Let’s get started</p><h2 id="newProjectTitle">Tell us about your project.</h2></div><button class="portal-link-button" type="button" id="cancelProjectButton">Close</button></div>
+      <p class="portal-muted">Share a few details so we can start planning. Submitting a request does not book an installation.</p>
+      <form id="newProjectForm" class="portal-form">
+        <label for="newTitle">Project name<input id="newTitle" name="title" required maxlength="120" placeholder="For example, basement vault room" autocomplete="off"></label>
+        <div class="portal-field-row"><label for="newService">What are you planning?<select id="newService" name="service_type" required><option value="">Select a service</option><option value="vault-room">Indoor vault room</option><option value="vault-door">Vault door supply &amp; installation</option><option value="gun-safe">Gun safe installation</option></select></label><label for="newZip">Project ZIP code<input id="newZip" name="zip_code" required inputmode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" maxlength="10" autocomplete="postal-code" placeholder="Five-digit ZIP code"></label></div>
+        <label for="newDescription">A little about your space<textarea id="newDescription" name="description" required rows="4" maxlength="5000" placeholder="Your goals, the intended location, and any safe or door you already have in mind."></textarea></label>
+        <p class="portal-muted portal-small">Please leave out lock combinations, access codes, and details of valuables. <a class="text-link" href="portal-privacy.html">Account privacy</a></p>
+        <div class="portal-actions"><button type="submit" class="button">Send project request <span aria-hidden="true">↗</span></button><span class="portal-muted portal-small">Maine &amp; New Hampshire, statewide.</span></div>
+        <p class="portal-status" id="newProjectStatus" role="status" aria-live="polite" hidden></p>
+      </form>
+    </section>
+    <div id="projectContent" class="portal-stack" hidden>
+      <section class="portal-card portal-overview" aria-labelledby="projectTitle"><div class="portal-section-heading"><div><p class="eyebrow">The plan for your space</p><h2 id="projectTitle"></h2></div><span class="portal-badge" id="projectStage"></span></div><p class="portal-meta" id="projectMeta"></p><p class="portal-prewrap portal-muted" id="projectDescription"></p><ol class="portal-timeline" id="projectTimeline" aria-label="Project stages"></ol></section>
+      <div class="portal-grid portal-summary-grid">
+        <section class="portal-card portal-date-card" aria-labelledby="installationTitle"><span class="portal-calendar-icon" aria-hidden="true">↗</span><p class="eyebrow">Looking ahead</p><h2 id="installationTitle">Installation date</h2><p id="installationDate" class="portal-date"></p><p id="installationNote"></p></section>
+        <section class="portal-card" aria-labelledby="checklistTitle"><div class="portal-section-heading"><h2 id="checklistTitle">Ready for the day.</h2><span class="portal-badge" id="checklistCount"></span></div><p class="portal-muted">Your team will add preparation steps specific to your home. Check them off as you go.</p><ul class="portal-checklist" id="projectChecklist"></ul><p class="portal-status" id="checklistStatus" role="status" aria-live="polite" hidden></p></section>
+      </div>
+      <div class="portal-grid portal-detail-grid">
+        <div class="portal-stack">
+          <section class="portal-card" aria-labelledby="updatesTitle"><div class="portal-section-heading"><div><p class="eyebrow">Along the way</p><h2 id="updatesTitle">Project updates</h2></div><span class="portal-badge" id="updateCount"></span></div><ol class="portal-list portal-update-list" id="projectUpdates"></ol></section>
+          <section class="portal-card" aria-labelledby="documentsTitle"><div class="portal-section-heading"><h2 id="documentsTitle">Project documents</h2><span class="portal-badge" id="documentCount"></span></div><p class="portal-muted">Plans and documents shared by your Northwoods team.</p><ul class="portal-list" id="projectDocuments"></ul><p class="portal-status" id="documentStatus" role="status" aria-live="polite" hidden></p></section>
+          <section class="portal-card" aria-labelledby="changesTitle"><div class="portal-section-heading"><div><p class="eyebrow">Room for adjustments</p><h2 id="changesTitle">Change requests</h2></div><span class="portal-badge" id="changeCount"></span></div><p class="portal-muted">Have something to adjust? Send a request for review. Your plan changes only after the team confirms the scope, timing, and any cost.</p><ol class="portal-list" id="projectChanges"></ol><form id="changeForm" class="portal-form portal-form-divider"><label for="changeSummary">What would you like to change?<input id="changeSummary" name="summary" required maxlength="160" placeholder="Give your request a short title"></label><label for="changeDetails">Details<textarea id="changeDetails" name="details" required rows="4" maxlength="5000" placeholder="Tell us what you have in mind."></textarea></label><button type="submit" class="button portal-button-secondary">Submit for review <span aria-hidden="true">↗</span></button><p class="portal-status" id="changeStatus" role="status" aria-live="polite" hidden></p></form></section>
+        </div>
+        <section class="portal-card portal-conversation" aria-labelledby="messagesTitle"><div class="portal-section-heading"><div><p class="eyebrow">Let’s talk it through</p><h2 id="messagesTitle">Your conversation</h2></div></div><p class="portal-muted">A direct conversation with your Northwoods team, kept with this project.</p><ol class="portal-list portal-message-list" id="projectMessages" aria-label="Project conversation"></ol><form id="messageForm" class="portal-form portal-form-divider"><label for="messageBody">Message your project team<textarea id="messageBody" name="body" required rows="5" maxlength="5000" placeholder="Ask a question or share a project detail."></textarea></label><p class="portal-muted portal-small">Please leave out lock combinations and access codes. <a class="text-link" href="portal-privacy.html">Account privacy</a></p><div class="portal-actions"><button type="submit" class="button">Send message <span aria-hidden="true">↗</span></button><span class="portal-muted portal-small">Messages stay with this project.</span></div><p class="portal-status" id="messageStatus" role="status" aria-live="polite" hidden></p></form></section>
+      </div>
+    </div>
+  </div>
+  <noscript><section class="portal-card"><h2>JavaScript is needed for your portal.</h2><p>Please enable JavaScript to sign in and view your project, or <a class="text-link" href="contact.html">contact Northwoods</a>.</p></section></noscript>
+</main><div id="sharedFooter"></div>
+<script src="site-config.js"></script><script src="components.js"></script><script src="app.js"></script><script src="assets/vendor/supabase.js"></script><script src="portal-config.js"></script><script src="portal-api.js"></script><script src="portal.js"></script>
+</body>
+</html>
