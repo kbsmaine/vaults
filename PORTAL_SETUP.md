@@ -1,5 +1,7 @@
 # Northwoods customer portal setup
 
+**For your connected Vault project, database installation and public website settings are already complete. Skip steps 1 and 2 below. Read `CONNECTED_STATUS.md` for the current launch checklist. Do not rerun the fresh-install schema in this project.**
+
 The public website and portal are in this folder. Accounts, project records, and documents are kept in your Supabase project. The website never needs your database password or a Supabase secret key.
 
 ## 1. Add the database

@@ -2,9 +2,9 @@
 
 Complete public website with a Supabase-backed customer portal and owner dashboard.
 
-**Start with `PORTAL_SETUP.md` to connect accounts, database, email delivery, and hosting.**
+**Start with `CONNECTED_STATUS.md`. Your Vault database is installed and the website configuration is filled in. `PORTAL_SETUP.md` covers the remaining email and hosting setup.**
 
-The website source can live in GitHub. Use Cloudflare Pages for the actual customer website and Supabase for accounts and private project records. This package is prepared for configuration; a working hosted portal requires the setup steps and a live verification pass.
+The website source can live in GitHub. Use Cloudflare Pages for the actual customer website and Supabase for accounts and private project records. This package is connected to the Vault database. Publishing the website, configuring final email redirects/delivery, and a hosted verification pass remain.
 
 New pages:
 

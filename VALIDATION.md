@@ -11,7 +11,9 @@ The tests exercise failed saves without losing drafts, repeat submission protect
 
 ## Not yet verified
 
-The Supabase project URL/key are not configured in this package. The database script has not been applied to a live project. No real customer accounts have been created, no real email has been sent, and no website has been deployed by this work.
+The Vault Supabase database is now installed and the project URL/public key are configured. Live read-only checks confirmed RLS on all eight tables, a private document bucket, enabled email registration/confirmation, and denial of anonymous profile/project/RPC access. The security advisor has no warnings; the informational admin_users notice reflects intentional client denial. See `CONNECTED_STATUS.md`.
+
+No customer accounts have been created, no real email has been sent, and no website has been deployed by this work. SMTP, password policy, and Auth URL configuration remain unverified.
 
 Live account confirmation, password resets, Supabase Data API access, Storage upload restrictions, signed URL expiry, hosting headers, and final domain redirects need a hosted integration test. The SQL tests prove row-policy behavior, not the behavior of Supabase’s HTTP services.
 

@@ -83,6 +83,7 @@ create index projects_created_idx on public.projects(created_at desc);
 create index messages_project_created_idx on public.project_messages(project_id, created_at);
 create index messages_author_idx on public.project_messages(author_id);
 create index changes_project_created_idx on public.change_requests(project_id, created_at);
+create index changes_project_customer_idx on public.change_requests(project_id, customer_id);
 create index changes_customer_idx on public.change_requests(customer_id);
 create index checklist_project_order_idx on public.project_checklist(project_id, sort_order);
 create index updates_project_created_idx on public.project_updates(project_id, created_at);
@@ -394,6 +395,15 @@ grant execute on function public.is_admin(), public.can_access_project(uuid),
 
 comment on table public.admin_users is 'Only database owner manages membership. Never derive roles from user metadata.';
 comment on function public.set_checklist_completed(uuid,boolean) is 'Authorized project participants may change only completion, never checklist content or project identity.';
+-- Supabase may install this platform event trigger in public. Preserve its
+-- automatic RLS behavior while removing unnecessary direct client execution.
+do $$
+begin
+  if to_regprocedure('public.rls_auto_enable()') is not null then
+    execute 'revoke execute on function public.rls_auto_enable() from public, anon, authenticated';
+  end if;
+end;
+$$;
 commit;
 
 -- Bootstrap after the intended administrator has created their account:
