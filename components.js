@@ -23,6 +23,7 @@
         <a href="vault-doors.html"${active(['vault-doors'])}>Vault doors</a>
         <a href="process.html"${active(['process'])}>Our process</a>
         <a href="service-area.html"${active(['service-area'])}>Service area</a>
+        <a href="portal.html"${active(['portal', 'account', 'admin'])}>Customer portal</a>
         <a class="mobile-nav-cta" href="contact.html">Plan your project <span aria-hidden="true">↗</span></a>
       </nav>
       <div class="header-actions"><a class="button button-small" href="contact.html">Plan your project <span aria-hidden="true">↗</span></a></div>
@@ -35,7 +36,7 @@
         <div class="footer-brand"><a class="brand light-brand" href="index.html" aria-label="${escape(name)} home">${brand}</a><p>Indoor vault rooms, vault door supply and installation, and gun safe installation across Maine and New Hampshire.</p><span class="footer-region">ROOTED IN THE NORTH. BUILT FOR YOUR HOME.</span></div>
         <div class="footer-links">
           <div><strong>Explore</strong><a href="vault-rooms.html">Vault rooms</a><a href="safe-installation.html">Gun safes</a><a href="vault-doors.html">Vault doors</a><a href="process.html">Our process</a></div>
-          <div><strong>Good to know</strong><a href="service-area.html">Service area</a><a href="standards.html">Project standards</a><a href="faq.html">Common questions</a><a href="contact.html">Plan your project</a></div>
+          <div><strong>Good to know</strong><a href="service-area.html">Service area</a><a href="standards.html">Project standards</a><a href="faq.html">Common questions</a><a href="portal.html">Customer portal</a><a href="contact.html">Plan your project</a></div>
           <div><strong>Let's talk</strong>${contactLinks}<a href="contact.html">Start a project inquiry <span aria-hidden="true">↗</span></a><span>Maine &amp; New Hampshire</span><span>Statewide service</span></div>
         </div>
       </div>

@@ -1,65 +1,46 @@
-# Northwoods Vault & Safe website
+# Northwoods Vault & Safe
 
-A responsive, standalone website for a company providing indoor vault rooms, vault door supply and installation, and gun safe installation across Maine and New Hampshire. Vault doors are sourced through Safe & Vault Store.
+Complete public website with a Supabase-backed customer portal and owner dashboard.
 
-## Preview
+**Start with `PORTAL_SETUP.md` to connect accounts, database, email delivery, and hosting.**
 
-Open `index.html` in a browser. The site uses ordinary HTML, CSS, JavaScript, and local image assets; there is no build or package installation step. For development, you can also serve this folder with a static file server. Keep the supplied directory structure intact.
+The website source can live in GitHub. Use Cloudflare Pages for the actual customer website and Supabase for accounts and private project records. This package is prepared for configuration; a working hosted portal requires the setup steps and a live verification pass.
 
-## Business identity and contact details
+New pages:
 
-Edit `site-config.js` to set the confirmed business name, wordmark, phone number, and email address. The current business name is **Northwoods Vault & Safe**. No phone number or email address was provided, so those fields are intentionally empty and their contact links remain hidden.
+- `account.html`: sign-in, registration, email confirmation, and password reset.
+- `portal.html`: customer projects, progress, messages, change requests, preparation checklist, and documents.
+- `admin.html`: owner project management and customer communication.
+- `portal-privacy.html`: plain-language information about portal data.
 
-- `businessName`: full company name used in the shared interface and inquiry summary.
-- `brandPrimary` / `brandSecondary`: two lines of the navigation and footer wordmark.
-- `phoneDisplay`: the readable phone number.
-- `phoneHref`: a dialable number, ideally including its country code, without a `tel:` prefix.
-- `email`: the public inquiry email address, without a `mailto:` prefix.
+Open `index.html` after extracting the entire ZIP to inspect the public website. To exercise account pages locally, serve the folder over HTTP (for example `python -m http.server 8000`) and configure matching Supabase auth redirect URLs. Real accounts need the backend configuration; opening an HTML file alone does not activate login.
 
-If the business name changes again, review the text on each HTML page as well as the shared configuration. Confirm the service descriptions and chosen product details before public use.
+Build for Cloudflare Pages with `node build.cjs` and publish the `dist` directory. No npm install is required for the website. SQL setup and test files stay in the source repository and are excluded from the deployment.
 
-## Inquiry behavior
+The existing public inquiry planner still prepares a summary for copying; it does not send that public form. Customers can submit an actual project request after signing in to the new portal. Business contact details in `site-config.js` remain blank until confirmed.
 
-The project inquiry has no backend or submission service. It creates an editable summary in the current page, which the visitor can copy. If an email address is configured, an **Open email draft** link opens the visitor's email application with the current summary. Sending occurs only when the visitor sends that email. No request is presented as received, booked, or submitted by the website.
+## Public website and assets
 
-The page does not create accounts, persist requests, or store passwords. Entered details remain in the live page; browser autofill and page restoration remain subject to the visitor's browser settings. The website makes no form submission or background request with inquiry data. Copy uses the browser clipboard when available and selects the summary for manual copying otherwise. The disabled form includes a clear JavaScript fallback.
+The public pages describe indoor vault rooms, vault door supply and installation, and gun safe installation across Maine and New Hampshire. Vault doors are sourced through Safe & Vault Store. The design uses forest green, warm cream, and pale lime, with responsive layouts and visible keyboard focus.
 
-The ZIP field checks a five-digit format beginning with `03` or `04`, the prefix range for Maine and New Hampshire; it does not verify a specific postal location, availability, or installation suitability. Use project follow-up to confirm the actual location and scope.
+The homepage image is an original AI-created architectural concept rendering, labeled on the site. It does not represent a completed installation or a specific supplier product. The statewide Maine/New Hampshire service map uses public-domain Natural Earth boundary data. See `assets/ASSET_NOTES.md` for provenance.
 
-Preselect a service with `contact.html?service=vault-room`, `contact.html?service=vault-door`, or `contact.html?service=gun-safe`.
+## Business settings
 
-## Design and assets
+Edit `site-config.js` to add your verified public phone number and email. `phoneHref` takes a dialable number without `tel:`; `email` takes an email address without `mailto:`. Empty contact fields remain hidden. The confirmed business name is Northwoods Vault & Safe.
 
-The design uses a forest green, warm cream, and muted bronze palette with responsive layouts, visible keyboard focus, semantic headings, mobile navigation, and reduced-motion support. Content remains visible without reveal animations.
+The public planner at `contact.html` prepares an editable inquiry and optionally opens an email draft when a business email is configured. Its ZIP format check does not confirm installation suitability or scheduling availability. The new customer portal submits actual project requests to Supabase after sign-in.
 
-The supplied hero image is an original AI-created architectural concept rendering. It is labeled as a rendering on the site and is not a photograph of a completed installation. Do not present it as project history or evidence of actual products.
+## Main code
 
-The service-area map is built from public-domain Natural Earth state boundary data, with Maine and New Hampshire highlighted. It depicts statewide coverage; it is not a property survey, route map, or promise of access to a particular site. See https://www.naturalearthdata.com/about/terms-of-use/ for Natural Earth's public-domain terms.
+- `styles.css`, `components.js`, `app.js`: public design, shared navigation/footer, and public inquiry planner.
+- `portal-config.js`: the Supabase public URL and publishable key.
+- `portal-api.js`: account/session access and database/storage operations.
+- `account.js`, `portal.js`, `admin.js`: account, customer, and owner interactions.
+- `portal.css`, `account.css`: portal layouts using the existing brand.
+- `backend/schema.sql`: database setup, permissions, and private storage policies.
+- `build.cjs`, `_headers`: static hosting build and browser security headers.
 
-## Main files
+## Verification
 
-- `index.html`: homepage and service overview.
-- `styles.css`: complete responsive visual design.
-- `site-config.js`: business identity and optional contact details.
-- `components.js`: shared navigation, footer, and configured contact links.
-- `app.js`: mobile navigation and editable inquiry preparation.
-- `contact.html`: project inquiry planner.
-- `vault-rooms.html`, `safe-installation.html`, `vault-doors.html`: service information.
-- `process.html`, `standards.html`, `service-area.html`, `faq.html`: planning and service details.
-- Local asset directory: rendering and geographic map artwork.
-
-## Validation and launch handoff
-
-JavaScript syntax, internal page/asset references, content consistency, and inquiry behavior should be checked before delivery. Review the site in desktop and mobile browsers before public launch. There is no server configuration, analytics integration, payment flow, external form provider, or automatic email delivery in this package.
-
-Hosting these static files is a separate deployment step. Connecting a backend later requires replacing the inquiry behavior and explaining the actual collection, sending, and retention of information to visitors.
-
-## Validation for this delivery
-
-- Checked all nine HTML pages for one main landmark and H1, unique IDs, and correct shared-script loading order.
-- Checked local page links, anchors, image references, CSS assets, and SVG XML.
-- All three JavaScript files pass Node syntax checks.
-- Reviewed responsive stylesheet rules and corrected the mobile-menu keyboard focus behavior.
-- Browser rendering and interaction testing were not completed: the available browser policy blocked the local preview. Open `index.html` in your own browser and check desktop/mobile layouts, navigation, and inquiry preparation before publishing.
-
-See `assets/ASSET_NOTES.md` for the original illustration prompt and map provenance.
+See `VALIDATION.md` for automated checks and their limits. Browser rendering was not available in this workspace, so review the new account/customer/owner screens on desktop and mobile before inviting real customers. Live authentication, email delivery, and file downloads must also be checked after your Supabase settings and hosted domain are connected.
