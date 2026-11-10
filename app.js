@@ -38,6 +38,7 @@
   const serviceLabels = { 'vault-room': 'Indoor vault room', 'vault-door': 'Vault door', 'gun-safe': 'Gun safe' };
   const selectedService = new URLSearchParams(window.location.search).get('service');
   if (Object.hasOwn(serviceLabels, selectedService || '')) form.elements.projectType.value = selectedService;
+  const deliveryMessage = () => ({ sending: 'Sending your inquiry…', accepted: 'Your inquiry was submitted. You can keep a copy for your records.', unconfirmed: 'We could not confirm submission. Your details are still here.' })[form.dataset.deliveryState];
   const clearErrors = () => {
     form.querySelectorAll('[aria-invalid="true"]').forEach(field => field.removeAttribute('aria-invalid'));
     status.textContent = '';
@@ -52,6 +53,7 @@
   });
   form.addEventListener('submit', event => {
     event.preventDefault();
+    if (form.dataset.deliveryState === 'sending') return;
     clearErrors();
     for (const key of ['name', 'details']) {
       const field = form.elements[key];
@@ -80,17 +82,18 @@
       '', 'Please contact me to discuss the project and next steps.'
     ].filter((line, index, lines) => line !== '' || (index > 0 && lines[index - 1] !== '')).join('\n');
     preview.hidden = false;
-    draftStatus.textContent = 'Your inquiry is ready to review. Nothing has been sent.';
+    draftStatus.textContent = deliveryMessage() || 'Review your summary, then choose Send inquiry. Nothing has been sent yet.';
+    form.dispatchEvent(new CustomEvent('inquiry:prepared'));
     $('#previewHeading').focus();
   });
   summary?.addEventListener('input', () => {
-    draftStatus.textContent = 'Your edited summary is ready to copy or share. Nothing has been sent.';
+    draftStatus.textContent = deliveryMessage() || 'Review your changes, then choose Send inquiry.';
   });
   copyButton?.addEventListener('click', async () => {
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
       await navigator.clipboard.writeText(summary.value);
-      draftStatus.textContent = 'Inquiry copied. Paste it into a message when you are ready to share it.';
+      draftStatus.textContent = 'Summary copied. ' + (deliveryMessage() || 'Copying does not send your inquiry.');
     } catch {
       summary.focus();
       summary.select();

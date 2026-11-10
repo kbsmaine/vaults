@@ -4,5 +4,7 @@ window.SITE_CONFIG = Object.freeze({
   brandPrimary: 'NORTHWOODS',
   brandSecondary: 'VAULT & SAFE',
   phoneDisplay: '',
-  phoneHref: ''
+  phoneHref: '',
+  // Public form ID only. The recipient is configured privately in Formspree.
+  inquiry: Object.freeze({ enabled: false, formId: '' })
 });

@@ -15,3 +15,4 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - PRIVATE_INQUIRY_SETUP.md
