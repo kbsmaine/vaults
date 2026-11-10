@@ -23,6 +23,7 @@ function setup(overrides = {}) {
   for(const key of ['updateProject','postUpdate','sendMessage','reviewChange','addChecklist','deleteChecklist','setChecklist','uploadDocument','deleteDocument']) api[key] = overrides[key] || (async (...args)=>{calls.push([key,...args]); if(key==='postUpdate') details.updates.push({id:'u1',body:args[1],created_at:'2026-09-04T12:00:00Z'}); if(key==='sendMessage') details.messages.push({id:'m2',author_id:'owner',body:args[1],created_at:'2026-09-04T12:00:00Z'}); if(key==='deleteChecklist') details.checklist=[]; if(key==='setChecklist') details.checklist[0].completed=args[1]; if(key==='deleteDocument') details.documents=[];});
   const dom = new JSDOM(html, {url:'https://northwoods.example/admin.html',runScripts:'outside-only'});
   dom.window.NWPortal = api;
+  dom.window.NWDocumentViewer = {open:record=>calls.push(['viewDocument',record]),close:()=>calls.push(['closeViewer'])};
   dom.window.eval(code);
   const $ = id=>dom.window.document.getElementById(id);
   const submit = id=>$(id).dispatchEvent(new dom.window.Event('submit',{bubbles:true,cancelable:true}));
@@ -50,8 +51,7 @@ test('owner workspace authorization, filters, writes, document handling, and sta
   t.$('checklistList').querySelector('button').click();await flush();assert.match(t.$('checklistList').textContent,/No preparation/);
   const change=t.$('changesList').querySelector('form');change.elements.status.value='approved';change.elements.response.value='Confirmed for later.';change.dispatchEvent(new t.dom.window.Event('submit',{cancelable:true}));await flush();assert.ok(t.calls.some(c=>c[0]==='reviewChange'&&c[1]==='ch1'&&c[2].status==='approved'));
   t.$('editTitle').value='Updated plan';t.$('editStage').value='planning';t.$('editDate').value='2026-10-10';t.$('editDateNote').value='Morning arrival';t.submit('projectEditForm');await flush();assert.ok(t.calls.some(c=>c[0]==='updateProject'&&c[2].installation_date==='2026-10-10'&&c[2].date_note==='Morning arrival'));
-  const expired=[];const canceled=[];t.dom.window.setTimeout=(fn)=>{expired.push(fn);return expired.length;};t.dom.window.clearTimeout=(id)=>canceled.push(id);
-  t.$('documentsList').querySelector('button').click();await flush();const link=t.$('documentsList').querySelector('a');assert.equal(link.hidden,false);assert.equal(link.href,'https://example.com/signed.pdf');t.$('documentsList').querySelector('button').click();await flush();assert.ok(canceled.includes(1));assert.equal(link.hidden,false);expired.at(-1)();assert.equal(link.hidden,true);
+  t.$('documentsList').querySelector('button[aria-label^="View"]').click();await flush();assert.ok(t.calls.some(c=>c[0]==='viewDocument'&&c[1].storage_path==='p1/plan.pdf'));
   t.$('documentsList').querySelector('button[aria-label^="Delete"]').click();await flush();assert.match(t.$('documentsList').textContent,/No project documents/);
   // Validate uploads before sending and pass valid file and title through the API.
   const uploadFile=new t.dom.window.File(['plan content'],'plan.pdf',{type:'application/pdf'});Object.defineProperty(t.$('documentFile'),'files',{configurable:true,value:[uploadFile]});t.$('documentForm').reportValidity=()=>true;t.$('documentLabel').value='Plan';t.submit('documentForm');await flush();assert.ok(t.calls.some(c=>c[0]==='uploadDocument'&&c[1]==='p1'&&c[2]===uploadFile&&c[3]==='Plan'));
@@ -63,5 +63,5 @@ test('owner workspace authorization, filters, writes, document handling, and sta
   t=setup({getProjectDetails:async()=>({...fixture(),changes:[{id:'approved1',summary:'Saved review',details:'Existing request',status:'approved',response:'Already agreed',created_at:'2026-09-04T00:00:00Z'}]})});await flush();t.$('refreshProjects').click();await flush();assert.equal(t.$('changesList').querySelector('select').value,'approved');assert.equal(t.$('changesList').querySelector('textarea').value,'Already agreed');t.dom.window.close();
   t=setup({listProjects:async()=>[]});await flush();assert.equal(t.$('adminDetail').hidden,true);assert.match(t.$('projectList').textContent,/New customer projects/);t.dom.window.close();
   t=setup({listProjects:async()=>{throw new Error('Connection failed');}});await flush();assert.match(t.$('adminStatus').textContent,/Connection failed/);assert.equal(t.$('refreshProjects').disabled,false);t.dom.window.close();
-  console.log('PASS: setup gate, authorization, loading, safe text, filters, stale response protection, mutation errors and success, checklist, change reviews, project editing, documents/renewal, upload validation, saved-review refresh, partial-refresh success, sign out, empty/error states.');
+  console.log('PASS: setup gate, authorization, loading, safe text, filters, stale response protection, mutation errors and success, checklist, change reviews, project editing, document viewer, upload validation, saved-review refresh, partial-refresh success, sign out, empty/error states.');
 });

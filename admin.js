@@ -2,7 +2,7 @@
   'use strict';
   const api = window.NWPortal;
   const $ = (id) => document.getElementById(id);
-  const state = { session: null, projects: [], customers: [], selected: null, details: null, busy: false, request: 0, timers: [], disabled: [] };
+  const state = { session: null, projects: [], customers: [], selected: null, details: null, busy: false, request: 0, disabled: [] };
   const services = { 'vault-room': 'Indoor vault room', 'vault-door': 'Vault door', 'gun-safe': 'Gun safe installation' };
   const changeStatuses = [['pending', 'Pending'], ['in_review', 'In review'], ['approved', 'Approved'], ['declined', 'Declined']];
   const node = (tag, className, text) => {
@@ -24,7 +24,6 @@
     target.dataset.tone = tone;
   };
   const messageFor = (error) => error && error.message ? error.message : 'Something went wrong. Please try again.';
-  const clearTimers = () => { state.timers.forEach(window.clearTimeout); state.timers = []; };
   function setBusy(busy) {
     state.busy = busy;
     $('adminWorkspace').setAttribute('aria-busy', String(busy));
@@ -96,7 +95,7 @@
   }
   async function selectProject(id, focusHeading = false) {
     const request = ++state.request;
-    clearTimers();
+    window.NWDocumentViewer.close();
     state.selected = state.projects.find((project) => project.id === id) || null;
     state.details = null;
     $('adminDetail').hidden = true;
@@ -144,7 +143,7 @@
       if (selected) {
         await selectProject(selected.id);
       } else {
-        clearTimers();
+        window.NWDocumentViewer.close();
         state.selected = null;
         state.details = null;
         $('adminDetail').hidden = true;
@@ -260,7 +259,7 @@
     });
   }
   function renderDocuments() {
-    clearTimers();
+    window.NWDocumentViewer.close();
     const list = $('documentsList');
     list.replaceChildren();
     const documents = state.details.documents || [];
@@ -270,45 +269,13 @@
       const info = node('div');
       info.append(node('h3', '', documentRecord.label), node('p', 'portal-meta', dateText(documentRecord.created_at)));
       const actions = node('div', 'portal-actions');
-      let expiryTimer;
-      const downloadStatus = node('p', 'portal-status');
-      downloadStatus.setAttribute('role', 'status');
-      downloadStatus.setAttribute('aria-live', 'polite');
-      const link = node('a', 'text-link', 'Open file');
-      link.hidden = true;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.setAttribute('aria-label', `Open ${documentRecord.label} in a new tab`);
-      const prepare = actionButton('Get download link', async () => {
-        if (state.busy) return;
-        const projectId = state.selected.id;
-        const request = state.request;
-        setBusy(true);
-        setStatus(downloadStatus, 'Preparing a secure download…');
-        try {
-          const url = await api.documentUrl(documentRecord.storage_path);
-          if (request !== state.request || !state.selected || state.selected.id !== projectId || !row.isConnected) return;
-          if (typeof url !== 'string' || !/^https:\/\//i.test(url)) throw new Error('The download link could not be prepared. Please try again.');
-          if (expiryTimer) window.clearTimeout(expiryTimer);
-          link.href = url;
-          link.hidden = false;
-          setStatus(downloadStatus, 'Your link is ready and expires in one minute.', 'success');
-          expiryTimer = window.setTimeout(() => {
-            if (!link.isConnected) return;
-            link.hidden = true;
-            link.removeAttribute('href');
-            setStatus(downloadStatus, 'This link has expired. Get a new download link to open the file.');
-          }, 55000);
-          state.timers.push(expiryTimer);
-        } catch (error) {
-          if (row.isConnected) setStatus(downloadStatus, messageFor(error), 'error');
-        } finally { setBusy(false); }
+      const view = actionButton('View document', () => {
+        if (!state.busy && row.isConnected) window.NWDocumentViewer.open(documentRecord);
       });
-      prepare.setAttribute('aria-label', `Get download link for ${documentRecord.label}`);
+      view.setAttribute('aria-label', `View ${documentRecord.label}`);
       const remove = actionButton('Delete document', () => runWrite(null, () => api.deleteDocument(documentRecord), 'Document deleted.', 'documents'));
       remove.setAttribute('aria-label', `Delete document: ${documentRecord.label}`);
-      actions.append(prepare, link, remove);
-      info.append(downloadStatus);
+      actions.append(view, remove);
       row.append(info, actions);
       list.append(row);
     });
@@ -418,10 +385,11 @@
       $('adminSignOut').addEventListener('click', async () => {
         if (state.busy) return;
         ++state.request;
+        window.NWDocumentViewer.close();
         setBusy(true);
         try {
           await api.signOut();
-          clearTimers();
+          window.NWDocumentViewer.close();
           state.session = null;
           state.selected = null;
           $('adminWorkspace').hidden = true;

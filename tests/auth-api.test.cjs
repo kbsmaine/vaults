@@ -133,7 +133,7 @@ async function accountHarness({configured=true,href,initialSession=null,override
   };
 }
 
-function apiHarness({config,queryResponse,storageResponse,rpcResponse,authOverrides={}}={}) {
+function apiHarness({config,queryResponse,storageResponse,rpcResponse,fetchResponse,authOverrides={}}={}) {
   const calls=[];
   const {location,history,redirects}=locationStub('https://northwoods.example/vaults/account.html');
   const auth={getUser:async()=>({data:{user},error:null}),getSession:async()=>({data:{session},error:null}),
@@ -159,7 +159,7 @@ function apiHarness({config,queryResponse,storageResponse,rpcResponse,authOverri
   }};
   const window={location,PORTAL_CONFIG:config || {supabaseUrl:'https://project.supabase.co',supabasePublishableKey:'sb_publishable_testKey'},
     supabase:{createClient(...args){calls.push({createClient:copy(args)});return client;}}};
-  vm.runInNewContext(apiSource,{window,history,URL,crypto:{randomUUID:()=> 'fixed-uuid'},console},{filename:'portal-api.js'});
+  vm.runInNewContext(apiSource,{window,history,URL,fetch:async(...args)=>{calls.push({fetch:args});if(!fetchResponse) throw new Error('Unexpected network request');return fetchResponse(...args);},crypto:{randomUUID:()=> 'fixed-uuid'},console},{filename:'portal-api.js'});
   return {api:window.NWPortal,calls,redirects};
 }
 
@@ -356,6 +356,49 @@ test('private documents use the private bucket and a 60-second signed download U
 test('storage signing errors propagate instead of yielding a public URL',async()=>{
   const h=apiHarness({storageResponse:()=>({data:null,error:new Error('permission denied')})});
   await assert.rejects(h.api.documentUrl('other-project/private.pdf'),/permission denied/);
+});
+
+test('document preview fetches an authorized private URL without credentials, redirects, or persistent caching',async()=>{
+  const h=apiHarness({fetchResponse:async()=>new Response(new Blob(['%PDF fixture'],{type:'application/pdf'}),{headers:{'content-type':'application/pdf'}})});
+  const controller=new AbortController();const file=await h.api.documentFile('customer-1/file.pdf',{signal:controller.signal});
+  assert.equal(file.type,'application/pdf');assert.equal(await file.text(),'%PDF fixture');
+  const [url,options]=h.calls.find(call=>call.fetch).fetch;
+  assert.match(url,/\/object\/sign\/project-documents\/customer-1\/file.pdf/);
+  assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');assert.equal(options.cache,'no-store');assert.equal(options.referrerPolicy,'no-referrer');assert.equal(options.signal,controller.signal);
+});
+
+test('document preview rejects untrusted origins, buckets, schemes and substituted document paths before fetching',async t=>{
+  for(const signedUrl of [
+    'https://evil.example/storage/v1/object/sign/project-documents/customer-1/file.pdf',
+    'http://project.supabase.co/storage/v1/object/sign/project-documents/customer-1/file.pdf',
+    'https://project.supabase.co/storage/v1/object/public/project-documents/customer-1/file.pdf',
+    'https://project.supabase.co/storage/v1/object/sign/project-documents/other/file.pdf',
+    'https://name:password@project.supabase.co/storage/v1/object/sign/project-documents/customer-1/file.pdf',
+    'javascript:alert(1)'
+  ]) await t.test(signedUrl,async()=>{
+    const h=apiHarness({storageResponse:()=>({data:{signedUrl},error:null})});
+    await assert.rejects(h.api.documentFile('customer-1/file.pdf'),/could not be verified/);
+    assert.equal(h.calls.some(call=>call.fetch),false);
+  });
+});
+
+test('failed, expired, mistyped, empty and oversized document responses are not rendered',async t=>{
+  for(const [name,response] of [
+    ['expired',()=>new Response('expired',{status:403})],
+    ['server error',()=>new Response('unavailable',{status:503})],
+    ['HTML',()=>new Response('<html>bad</html>',{headers:{'content-type':'text/html'}})],
+    ['wrong type',()=>new Response('image',{headers:{'content-type':'image/png'}})],
+    ['empty',()=>new Response('',{headers:{'content-type':'application/pdf'}})],
+    ['too large',()=>new Response('huge',{headers:{'content-type':'application/pdf','content-length':String(10*1024*1024+1)}})]
+  ]) await t.test(name,async()=>{
+    const h=apiHarness({fetchResponse:response});await assert.rejects(h.api.documentFile('customer-1/file.pdf'));
+  });
+});
+
+test('closing before signing completes prevents the document fetch',async()=>{
+  const controller=new AbortController();const h=apiHarness();controller.abort();
+  await assert.rejects(h.api.documentFile('customer-1/file.pdf',{signal:controller.signal}));
+  assert.equal(h.calls.some(call=>call.fetch),false);
 });
 
 test('database errors reject reads and writes instead of becoming successful results',async()=>{

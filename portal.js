@@ -189,40 +189,19 @@
       const info = node('div');
       info.append(node('strong', '', document.label), timeNode(document.created_at));
       const actions = node('div', 'portal-actions');
-      const button = node('button', 'button portal-button-secondary button-small', 'Get secure link');
+      const button = node('button', 'button portal-button-secondary button-small', 'View document');
       button.type = 'button';
-      const link = node('a', 'text-link', 'Open document ↗');
-      link.hidden = true;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      const note = node('span', 'portal-meta portal-small');
-      button.addEventListener('click', async () => {
-        button.disabled = true;
-        link.hidden = true;
-        note.textContent = '';
-        button.textContent = 'Preparing link…';
-        try {
-          const signed = await api.documentUrl(document.storage_path);
-          const url = new URL(signed);
-          if (url.protocol !== 'https:') throw new Error('The document link could not be verified. Please contact your team.');
-          if (activeId !== projectId || !row.isConnected) return;
-          link.href = url.href;
-          link.hidden = false;
-          note.textContent = 'Link expires in 60 seconds.';
-          status('documentStatus', 'Your secure link is ready. Select “Open document” to view it.', 'success');
-        } catch (error) {
-          if (activeId === projectId) status('documentStatus', errorMessage(error), 'error');
-        } finally {
-          button.disabled = false;
-          button.textContent = 'Refresh secure link';
-        }
+      button.setAttribute('aria-label', `View ${document.label}`);
+      button.addEventListener('click', () => {
+        if (activeId === projectId && row.isConnected) window.NWDocumentViewer.open(document);
       });
-      actions.append(button, link, note);
+      actions.append(button);
       row.append(info, actions);
       return row;
     }));
   }
   async function loadProject(id, options = {}) {
+    window.NWDocumentViewer.close();
     const ownGeneration = ++generation;
     activeId = id;
     $('projectContent').hidden = true;
@@ -307,6 +286,7 @@
   }
 
   $('signOutButton').addEventListener('click', async () => {
+    window.NWDocumentViewer.close();
     $('signOutButton').disabled = true;
     try { await api.signOut(); }
     catch (error) { status('pageStatus', errorMessage(error), 'error'); $('signOutButton').disabled = false; }

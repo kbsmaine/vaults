@@ -1,0 +1,17 @@
+# GitHub Pages builds this repository with Jekyll. Publish website assets only.
+# Keep test documents, review images, backend scripts, and setup notes in GitHub.
+exclude:
+  - backend
+  - tests
+  - review
+  - dist
+  - node_modules
+  - build.cjs
+  - CONNECTED_STATUS.md
+  - DOCUMENT_VIEWER_REVIEW.md
+  - PORTAL_SETUP.md
+  - README.md
+  - VALIDATION.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

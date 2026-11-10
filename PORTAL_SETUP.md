@@ -73,7 +73,7 @@ Use two different customer test accounts and your owner account. Confirm both em
 - The owner can update that project’s stage and planned installation date, post an update, and send a reply.
 - A customer can request a change. Its status changes only after the owner reviews it.
 - A preparation task can be checked off by its customer and is visible to the owner after refresh.
-- A PDF, PNG, or JPG under 10 MB uploaded by the owner can be downloaded by that project’s customer. Another customer cannot access it. Download links expire quickly; obtain a new one from the portal if needed.
+- A PDF, PNG, or JPG under 10 MB uploaded by the owner can be downloaded by that project’s customer. Another customer cannot access it. View document opens an in-page preview with an optional Download button. The private retrieval link expires quickly; an already-loaded preview remains available until closed.
 - Signing out prevents access to project data. Password reset emails return to the password form and allow a fresh sign-in afterward.
 - Check the account, customer, and owner pages on a phone as well as a desktop. Confirm there are no browser console errors, redirects to the wrong domain, or blocked requests.
 

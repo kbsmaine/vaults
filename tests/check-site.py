@@ -25,7 +25,9 @@ for file in ROOT.glob('*.html'):
     if p.h1!=(2 if file.name=='admin.html' else 1):errors.append(f'{file.name}: unexpected h1 count')
     if len(p.ids)!=len(set(p.ids)):errors.append(f'{file.name}: duplicate IDs')
     base=['site-config.js','components.js','app.js']
-    if file.stem in ('account','portal','admin'):base+=['assets/vendor/supabase.js','portal-config.js','portal-api.js',file.stem+'.js']
+    if file.stem in ('account','portal','admin'):base+=['assets/vendor/supabase.js','portal-config.js','portal-api.js']
+    if file.stem in ('portal','admin'):base+=['document-viewer.js']
+    if file.stem in ('account','portal','admin'):base+=[file.stem+'.js']
     if p.scripts!=base:errors.append(f'{file.name}: wrong dependency order')
     for img in p.images:
         if 'alt' not in img:errors.append(f'{file.name}: image missing alt')

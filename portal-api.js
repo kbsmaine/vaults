@@ -63,6 +63,28 @@
     const data = await result(ready().storage.from('project-documents').createSignedUrl(path,60,{download:true}));
     return data.signedUrl;
   }
+  async function documentFile(path, {signal} = {}) {
+    // Keep authorization in the private bucket. Fetch the short-lived URL into
+    // memory so an open preview/download does not stop working when it expires.
+    const signed = await documentUrl(path);
+    signal?.throwIfAborted();
+    const link = new URL(signed);
+    const expected = `/storage/v1/object/sign/project-documents/${path}`;
+    if (link.protocol !== 'https:' || link.origin !== new URL(url).origin || link.username || link.password || decodeURIComponent(link.pathname) !== expected) {
+      throw new Error('The document link could not be verified. Please contact your team.');
+    }
+    const response = await fetch(link.href, {signal, credentials:'omit', referrerPolicy:'no-referrer', redirect:'error', cache:'no-store'});
+    if (!response.ok) throw new Error('The document could not be loaded. Please try again or contact your project team.');
+    const allowed = {png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',pdf:'application/pdf'};
+    const expectedType = allowed[String(path).split('.').pop().toLowerCase()];
+    const type = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+    if (!expectedType || type !== expectedType || Number(response.headers.get('content-length')) > 10 * 1024 * 1024) {
+      throw new Error('This file cannot be previewed. Ask your team for a PDF, PNG, or JPG up to 10 MB.');
+    }
+    const file = await response.blob();
+    if (!file.size || file.size > 10 * 1024 * 1024) throw new Error('The document is empty or larger than 10 MB. Please contact your team.');
+    return file.slice(0, file.size, expectedType);
+  }
   async function listCustomers() { return result(ready().from('profiles').select('id,full_name,email').order('full_name')); }
   async function updateProject(id,data) {
     const row = await result(ready().from('projects').update({title:data.title,stage:data.stage,installation_date:data.installation_date || null,date_note:data.date_note || ''}).eq('id',id).select('id').single());
@@ -91,6 +113,6 @@
     window.location.replace('account.html');
   }
   window.NWPortal = Object.freeze({configured,stages,client,context,requireSession,redirectURL,signOut,
-    listProjects,createProject,getProject,getProjectDetails,sendMessage,requestChange,setChecklist,documentUrl,
+    listProjects,createProject,getProject,getProjectDetails,sendMessage,requestChange,setChecklist,documentUrl,documentFile,
     listCustomers,updateProject,postUpdate,reviewChange,addChecklist,deleteChecklist,uploadDocument,deleteDocument});
 })();
