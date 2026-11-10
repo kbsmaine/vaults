@@ -66,7 +66,7 @@ for (const clipboardFails of [false, true]) {
       assert.equal(summary.selectionStart, 0);
       assert.equal(summary.selectionEnd, edited.length);
     } else assert.equal(copied(), edited);
-    assert.match(d.querySelector('#inquiry-privacy').textContent, /does not send/);
+    assert.match(d.querySelector('#inquiry-privacy').textContent, /draft stays on this page/);
     dom.window.close();
   });
 }
