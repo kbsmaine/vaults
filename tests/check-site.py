@@ -28,7 +28,8 @@ for file in ROOT.glob('*.html'):
     if file.stem in ('account','portal','admin'):base+=['assets/vendor/supabase.js','portal-config.js','portal-api.js']
     if file.stem in ('portal','admin'):base+=['document-viewer.js']
     if file.stem in ('account','portal','admin'):base+=[file.stem+'.js']
-    if p.scripts!=base:errors.append(f'{file.name}: wrong dependency order')
+    scripts=[urlsplit(src)._replace(query='',fragment='').geturl() for src in p.scripts]
+    if scripts!=base:errors.append(f'{file.name}: wrong dependency order')
     for img in p.images:
         if 'alt' not in img:errors.append(f'{file.name}: image missing alt')
     for control in p.controls:

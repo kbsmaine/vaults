@@ -17,7 +17,7 @@ Open `index.html` after extracting the entire ZIP to inspect the public website.
 
 Build for Cloudflare Pages with `node build.cjs` and publish the `dist` directory. No npm install is required for the website. SQL setup and test files stay in the source repository and are excluded from the deployment.
 
-The public inquiry planner prepares an editable summary and opens an email draft addressed to the confirmed contact, `krpelletier33@gmail.com`. Visitors must send the draft from their email app; the website does not send it automatically. Copy remains available as a fallback. Customers can submit an actual project request after signing in to the portal. The public phone number remains unconfigured.
+The existing public inquiry planner still prepares a summary for copying; it does not send that public form. Customers can submit an actual project request after signing in to the new portal. The owner’s email is private and must never be included in website files, public configuration, links, or documentation. Public inquiry email delivery is not enabled.
 
 ## Public website and assets
 
@@ -27,9 +27,9 @@ The homepage image is an original AI-created architectural concept rendering, la
 
 ## Business settings
 
-Edit `site-config.js` to add your verified public phone number and email. `phoneHref` takes a dialable number without `tel:`; `email` takes an email address without `mailto:`. Empty contact fields remain hidden. The confirmed business name is Northwoods Vault & Safe.
+`site-config.js` contains public branding and optional public phone information only. `phoneHref` takes a dialable number without `tel:`. Empty phone fields remain hidden. Keep any inquiry recipient address exclusively in backend secrets; never add it to this public repository. The confirmed business name is Northwoods Vault & Safe.
 
-The public planner at `contact.html` prepares an editable inquiry and optionally opens an email draft when a business email is configured. Its ZIP format check does not confirm installation suitability or scheduling availability. The new customer portal submits actual project requests to Supabase after sign-in.
+The public planner at `contact.html` prepares an editable inquiry for copying. Email-draft links and public email rendering are removed to protect the owner’s private address. Its ZIP format check does not confirm installation suitability or scheduling availability. The new customer portal submits actual project requests to Supabase after sign-in.
 
 ## Main code
 

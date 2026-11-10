@@ -33,24 +33,11 @@
   const preview = $('#inquiryPreview');
   const summary = $('#inquirySummary');
   const copyButton = $('#copyRequest');
-  const emailDraft = $('#emailDraft');
   const draftStatus = $('#draftStatus');
-  const emailDraftNote = $('#emailDraftNote');
   const config = window.SITE_CONFIG || {};
-  const email = /^[^\s@?&#]+@[^\s@?&#]+\.[^\s@?&#]+$/.test(config.email || '') ? config.email : '';
   const serviceLabels = { 'vault-room': 'Indoor vault room', 'vault-door': 'Vault door', 'gun-safe': 'Gun safe' };
   const selectedService = new URLSearchParams(window.location.search).get('service');
   if (Object.hasOwn(serviceLabels, selectedService || '')) form.elements.projectType.value = selectedService;
-  const updateDraft = () => {
-    if (!email || !emailDraft) return;
-    const subject = `Project inquiry — ${config.businessName || 'Northwoods Vault & Safe'}`;
-    emailDraft.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary.value)}`;
-    emailDraft.hidden = false;
-    if (emailDraftNote) {
-      emailDraftNote.textContent = `Opens your email app with your inquiry addressed to ${email}. Press Send there to send it. If no email app opens, copy your request and email it to this address.`;
-      emailDraftNote.hidden = false;
-    }
-  };
   const clearErrors = () => {
     form.querySelectorAll('[aria-invalid="true"]').forEach(field => field.removeAttribute('aria-invalid'));
     status.textContent = '';
@@ -93,12 +80,10 @@
       '', 'Please contact me to discuss the project and next steps.'
     ].filter((line, index, lines) => line !== '' || (index > 0 && lines[index - 1] !== '')).join('\n');
     preview.hidden = false;
-    draftStatus.textContent = email ? 'Your inquiry is ready to review. Choose “Email inquiry” when you are ready. Nothing has been sent yet.' : 'Your inquiry is ready to review. Nothing has been sent.';
-    updateDraft();
+    draftStatus.textContent = 'Your inquiry is ready to review. Nothing has been sent.';
     $('#previewHeading').focus();
   });
   summary?.addEventListener('input', () => {
-    updateDraft();
     draftStatus.textContent = 'Your edited summary is ready to copy or share. Nothing has been sent.';
   });
   copyButton?.addEventListener('click', async () => {
@@ -112,10 +97,6 @@
       summary.setSelectionRange(0, summary.value.length);
       draftStatus.textContent = 'Your inquiry is selected. Use your device’s Copy command, or press Ctrl+C (Command+C on Mac).';
     }
-  });
-  emailDraft?.addEventListener('click', () => {
-    updateDraft();
-    draftStatus.textContent = 'Opening an email draft. The inquiry is sent only when you send it in your email app.';
   });
   if (fields) fields.disabled = false;
 })();

@@ -1,9 +1,8 @@
-/* Update confirmed business contact details here; empty values stay hidden. */
+/* Public branding and phone only. Inquiry recipients must stay in server-side secrets. */
 window.SITE_CONFIG = Object.freeze({
   businessName: 'Northwoods Vault & Safe',
   brandPrimary: 'NORTHWOODS',
   brandSecondary: 'VAULT & SAFE',
   phoneDisplay: '',
-  phoneHref: '',
-  email: 'krpelletier33@gmail.com'
+  phoneHref: ''
 });
