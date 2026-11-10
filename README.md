@@ -21,7 +21,7 @@ The existing public inquiry planner still prepares a summary for copying; it doe
 
 ## Public website and assets
 
-The public pages describe indoor vault rooms, vault door supply and installation, and gun safe installation across Maine and New Hampshire. Vault doors are sourced through Safe & Vault Store. The design uses forest green, warm cream, and pale lime, with responsive layouts and visible keyboard focus.
+The public pages describe indoor vault rooms, vault door supply and installation, and gun safe installation across Maine and New Hampshire. Vault door selection is coordinated with the room, opening, and installation requirements. The design uses forest green, warm cream, and pale lime, with responsive layouts and visible keyboard focus.
 
 The homepage image is an original AI-created architectural concept rendering, labeled on the site. It does not represent a completed installation or a specific supplier product. The statewide Maine/New Hampshire service map uses public-domain Natural Earth boundary data. See `assets/ASSET_NOTES.md` for provenance.
 

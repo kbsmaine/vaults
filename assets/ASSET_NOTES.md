@@ -20,4 +20,4 @@ Natural Earth data is public domain and permits commercial use without required 
 
 ## Other artwork
 
-Homepage service icons and favicon are original SVG artwork. `illustrations.css` retains the original uploaded site’s code-drawn installation illustrations. No Safe & Vault Store product photographs were copied or embedded.
+The favicon and interface icons are original SVG artwork. Service imagery uses original AI-created architectural concept renderings, clearly labeled on the site. These replaced the earlier code-drawn service illustrations. No third-party product photographs were copied or embedded.
