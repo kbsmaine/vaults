@@ -17,7 +17,7 @@ Open `index.html` after extracting the entire ZIP to inspect the public website.
 
 Build for Cloudflare Pages with `node build.cjs` and publish the `dist` directory. No npm install is required for the website. SQL setup and test files stay in the source repository and are excluded from the deployment.
 
-The existing public inquiry planner still prepares a summary for copying; it does not send that public form. Customers can submit an actual project request after signing in to the new portal. Business contact details in `site-config.js` remain blank until confirmed.
+The public inquiry planner prepares an editable summary and opens an email draft addressed to the confirmed contact, `krpelletier33@gmail.com`. Visitors must send the draft from their email app; the website does not send it automatically. Copy remains available as a fallback. Customers can submit an actual project request after signing in to the portal. The public phone number remains unconfigured.
 
 ## Public website and assets
 

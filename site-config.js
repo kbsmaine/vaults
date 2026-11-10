@@ -5,5 +5,5 @@ window.SITE_CONFIG = Object.freeze({
   brandSecondary: 'VAULT & SAFE',
   phoneDisplay: '',
   phoneHref: '',
-  email: ''
+  email: 'krpelletier33@gmail.com'
 });

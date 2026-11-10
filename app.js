@@ -46,7 +46,10 @@
     const subject = `Project inquiry — ${config.businessName || 'Northwoods Vault & Safe'}`;
     emailDraft.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(summary.value)}`;
     emailDraft.hidden = false;
-    if (emailDraftNote) emailDraftNote.hidden = false;
+    if (emailDraftNote) {
+      emailDraftNote.textContent = `Opens your email app with your inquiry addressed to ${email}. Press Send there to send it. If no email app opens, copy your request and email it to this address.`;
+      emailDraftNote.hidden = false;
+    }
   };
   const clearErrors = () => {
     form.querySelectorAll('[aria-invalid="true"]').forEach(field => field.removeAttribute('aria-invalid'));
@@ -90,7 +93,7 @@
       '', 'Please contact me to discuss the project and next steps.'
     ].filter((line, index, lines) => line !== '' || (index > 0 && lines[index - 1] !== '')).join('\n');
     preview.hidden = false;
-    draftStatus.textContent = 'Your inquiry is ready to review. Nothing has been sent.';
+    draftStatus.textContent = email ? 'Your inquiry is ready to review. Choose “Email inquiry” when you are ready. Nothing has been sent yet.' : 'Your inquiry is ready to review. Nothing has been sent.';
     updateDraft();
     $('#previewHeading').focus();
   });
